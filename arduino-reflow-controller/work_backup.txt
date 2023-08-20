@@ -1,0 +1,39 @@
+#include <Arduino.h>
+#include "max6675.h"
+#include <TM1650.h>
+
+char buffer[128], szF[6];
+
+int thermoDO = 4;
+int thermoCS = 5;
+int thermoCLK = 6;
+
+MAX6675 thermocouple(thermoCLK, thermoCS, thermoDO);
+TM1650 display;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Ksoft Flow Control Start!");
+  Wire.begin(); //Join the bus as master
+  display.init();
+  display.displayOn();
+  char line[] = "----";
+  display.displayString(line);
+  display.setBrightnessGradually(TM1650_MAX_BRIGHT); 
+  delay(500);
+}
+
+void displayTemperature(float temperature) {
+
+    dtostrf(temperature, 4, 1, szF );
+    sprintf(buffer, "%s", szF);
+    //Serial.println(buffer);
+    display.displayString(buffer);
+      
+}
+
+void loop() {
+   float temp = thermocouple.readCelsius();
+   displayTemperature(temp);
+   delay(1000);
+}
