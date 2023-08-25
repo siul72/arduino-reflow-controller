@@ -2,18 +2,19 @@
 #define REFLOW_H
 
 #include <Arduino.h>
-
-#include <TimerOne.h>
-
+#include <ktimer.h>
+ 
 #define SSR_CTRL 10 //Arduino Uno 9 or 10
 #define FAN_CTRL 11
 
 enum class ReflowZoneEnum{
     NONE=0,
     PRE_START,
+    PRE_START_STEADY,
     PRE_HEAT,
     SOAK,
     REFLOW,
+    REFLOW_STEADY,
     COOLING,
     MAX
  
@@ -30,12 +31,9 @@ class	Reflow{
         void loop();
         void start();
         void stop();
-        int getDuty();
-        void setDuty(int duty);
-        void incrementDuty(int duty=10);
-        void setCooling(int duration=120);
-
-        
+         
+        void setNextZone(); 
+        void setCooling();
 
     private:
         char buffer[128], szF[6];
@@ -49,6 +47,7 @@ class	Reflow{
         int currentDuration;
         const long interval = 1000; 
         unsigned long previousMillis;
+        Ktimer *my_timer;
 };
 
 #endif

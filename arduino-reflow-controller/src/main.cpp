@@ -77,12 +77,12 @@ void loop() {
     
   if(button_start.isPressed()){
       Serial.println("BUTTON START PRESSED");
-      myReflow.incrementDuty();
+      myReflow.setNextZone();
     }
   
   if(button_stop.isPressed()){
       Serial.println("BUTTON STOP PRESSED");
-      myReflow.setCooling(120);
+      myReflow.setCooling();
       
   }
   
